@@ -1,0 +1,23 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+      <h2>🔑 Đăng Nhập</h2>
+      {% if error %}
+        <p style="color: red;">{{ error }}</p>
+      {% endif %}
+      <form method="post">
+          {% csrf_token %}
+          <div class="mb-3">
+              <label>Tên đăng nhập</label>
+              <input type="text" name="username" class="form-control" required>
+          </div>
+          <div class="mb-3">
+              <label>Mật khẩu</label>
+              <input type="password" name="password" class="form-control" required>
+          </div>
+          <button class="btn btn-primary" type="submit">Đăng nhập</button>
+      </form>
+      <p>Chưa có tài khoản? <a href="{% url 'register' %}">Đăng ký ngay</a></p>
+  </div>
+{% endblock %}

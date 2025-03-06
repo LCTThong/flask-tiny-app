@@ -1,0 +1,37 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+  <div class="container mt-4">
+      <h2>📌 Danh sách bài viết</h2>
+      <a class="btn btn-primary mb-3" href="{% url 'create_post' %}">📝 Thêm bài viết mới</a>
+      
+      {% if posts %}
+        <ul class="list-group">
+          {% for post in posts %}
+            <li class="list-group-item">
+              <h3>✅ {{ post.title }}</h3>
+              <p>✍ {{ post.content|truncatewords:20 }}</p>
+              <small>🧑‍💻 {{ post.author }} | 📅 {{ post.created_at }}</small>
+              
+              <h5>💬 Bình luận:</h5>
+              {% for comment in post.comments.all %}
+                <p><strong>{{ comment.author.username }}:</strong> {{ comment.content }}</p>
+              {% endfor %}
+              
+              {% if user.is_authenticated %}
+                <form method="post" action="{% url 'add_comment' post.id %}">
+                    {% csrf_token %}
+                    {{ comment_form.as_p }}
+                    <button type="submit" class="btn btn-secondary">💬 Gửi bình luận</button>
+                </form>
+              {% else %}
+                <p>⚠ Bạn cần <a href="{% url 'login' %}">đăng nhập</a> để bình luận.</p>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>⚠ Chưa có bài viết nào.</p>
+      {% endif %}
+  </div>
+{% endblock %}
